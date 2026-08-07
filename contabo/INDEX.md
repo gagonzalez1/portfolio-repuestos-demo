@@ -5,12 +5,12 @@ secretos y no implica autorización para crear recursos o modificar DNS.
 
 | Recurso | Valor previsto | Valor confirmado |
 |---|---|---|
-| Aplicación Coolify | `portfolio-repuestos-app` | Pendiente |
-| PostgreSQL exclusivo | `portfolio-repuestos-db` | Pendiente |
-| Dominio temporal HTTPS | Asignado por Coolify | Pendiente |
-| Dominio definitivo | `repuestos-demo.metaia.pro` | Pendiente de aprobación |
-| Repositorio público | Proyecto independiente | Pendiente |
-| Rama de despliegue | `main`, tras estabilizar | Pendiente |
+| Aplicación Coolify | `portfolio-repuestos-app` | `qsilh0hdmrcpyxinirg8y81y` |
+| PostgreSQL exclusivo | `portfolio-repuestos-db` | `m12es2opa1h2iiu0iyp2cstc` |
+| Dominio HTTPS | DuckDNS + Traefik | `https://repuestos-demo.blakyta3d.duckdns.org` |
+| Dominio futuro | `repuestos-demo.metaia.pro` | Opcional, pendiente de DNS |
+| Repositorio público | Proyecto independiente | `gagonzalez1/portfolio-repuestos-demo` |
+| Rama de despliegue | `main` | Activa; autodeploy apagado |
 
 ## Actualización y rollback
 
@@ -21,3 +21,7 @@ secretos y no implica autorización para crear recursos o modificar DNS.
 4. Registrar aquí imagen, fecha, checksum del seed y dominio aprobado.
 5. Ante una regresión, volver a la imagen estable anterior en Coolify; no
    eliminar la base. El esquema y el seed son idempotentes.
+
+Primer despliegue estable: `zwz7stiqn418jrsgvl90fcj3`, 2026-08-07. Smoke
+tests aprobados para `/`, `/demo`, `/health`, sesiones anónimas, consulta con
+resultado, consulta inexistente y `/webhook` deshabilitado.
