@@ -714,8 +714,24 @@ CHAT_HTML = r"""<!doctype html>
       padding:6px 9px; border-radius:6px; cursor:pointer; font-size:12px; text-decoration:none;
     }
     .disclaimer { background:#fff3cd; color:#664d03; padding:8px 14px; font-size:12px; text-align:center; border-bottom:1px solid #ead58c; }
-    .suggestions { display:flex; gap:7px; overflow-x:auto; padding:8px 10px; background:#f7f7f7; border-top:1px solid #ddd; }
-    .suggestion { flex:0 0 auto; border:1px solid #b7c8c5; background:#fff; color:#075e54; border-radius:999px; padding:7px 10px; cursor:pointer; font-size:12px; }
+    .examples { background:#f7f9f8; border-top:1px solid #d8e1df; padding:10px 12px 9px; }
+    .examples-head { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+    .examples-title { color:#153f3a; font-size:13px; font-weight:800; }
+    .examples-hint { color:var(--muted); font-size:11px; }
+    .suggestions {
+      display:grid; grid-auto-flow:column; grid-auto-columns:minmax(270px, 320px);
+      gap:9px; overflow-x:auto; padding:0 1px 4px; scroll-snap-type:x proximity;
+    }
+    .suggestion {
+      scroll-snap-align:start; border:1px solid #c6d5d2; background:#fff; color:#172b28;
+      border-radius:12px; padding:10px 12px; cursor:pointer; text-align:left;
+      box-shadow:0 1px 2px rgba(7,94,84,.06); font:inherit;
+    }
+    .suggestion:hover, .suggestion:focus-visible { border-color:#075e54; box-shadow:0 3px 10px rgba(7,94,84,.12); outline:none; }
+    .case-kicker { display:block; color:#8b1a1a; font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .case-title { display:block; margin-top:3px; color:#153f3a; font-size:13px; line-height:1.25; }
+    .case-detail { display:-webkit-box; margin-top:4px; color:#667781; font-size:11px; line-height:1.3; overflow:hidden; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+    .case-action { display:block; margin-top:7px; color:#075e54; font-size:11px; font-weight:800; }
     main {
       flex: 1; overflow-y: auto; padding: 14px;
       background-image:
@@ -788,6 +804,8 @@ CHAT_HTML = r"""<!doctype html>
     @media (max-width: 640px) {
       .alias { display: none; }
       .demo-pill { font-size: 11px; padding: 4px 8px; }
+      .examples-hint { display:none; }
+      .suggestions { grid-auto-columns:minmax(250px, 84vw); }
     }
   </style>
 </head>
@@ -815,13 +833,44 @@ CHAT_HTML = r"""<!doctype html>
     </div>
   </main>
   <div class="typing" id="typing" style="display:none;">MotorIA está analizando la consulta...</div>
-  <div class="suggestions" aria-label="Consultas sugeridas">
-    <button class="suggestion">Necesito una junta de descarbonización para Mondeo 1.8 Zetec</button>
-    <button class="suggestion">Busco un subconjunto para motor F8Q en 0.50</button>
-    <button class="suggestion">Busco un kit de distribución con bomba para Corsa 1.6</button>
-    <button class="suggestion">No sé qué motor tiene, ¿me ayudás?</button>
-    <button class="suggestion">Busco un retén 35 x 47 x 7</button>
-  </div>
+  <section class="examples" aria-labelledby="examples-title">
+    <div class="examples-head">
+      <span class="examples-title" id="examples-title">¿Querés ver cómo razona MotorIA?</span>
+      <span class="examples-hint">Elegí un desafío. Podés editar el mensaje antes de enviarlo.</span>
+    </div>
+    <div class="suggestions" aria-label="Casos para probar">
+      <button class="suggestion" data-prompt="Estoy reparando un Ford Mondeo 1.8 Zetec 16V y necesito una junta de descarbonización completa. Si puede venir con retenes, mejor. ¿Qué opción del catálogo me recomendarías y por qué?">
+        <span class="case-kicker">Caso 1 · Compatibilidad</span>
+        <strong class="case-title">Una junta completa para un Mondeo</strong>
+        <span class="case-detail">Buscá una opción para el Zetec 16V y pedí que incluya retenes.</span>
+        <span class="case-action">Usar este ejemplo →</span>
+      </button>
+      <button class="suggestion" data-prompt="Tengo una Renault Kangoo diésel 1.9 con motor F8Q y estoy armando el motor en medida 0.50. Busco un subconjunto compatible. ¿Podés encontrarme una opción y mostrarme los datos importantes?">
+        <span class="case-kicker">Caso 2 · Motor y medida</span>
+        <strong class="case-title">Armar un F8Q en medida 0.50</strong>
+        <span class="case-detail">Combiná vehículo, combustible, código de motor y sobremedida.</span>
+        <span class="case-action">Usar este ejemplo →</span>
+      </button>
+      <button class="suggestion" data-prompt="Necesito hacer la distribución de un Chevrolet Corsa 1.6 8 válvulas y prefiero un kit que ya incluya la bomba de agua. ¿Hay alguna alternativa compatible en el catálogo?">
+        <span class="case-kicker">Caso 3 · Kit completo</span>
+        <strong class="case-title">Distribución y bomba en una sola búsqueda</strong>
+        <span class="case-detail">Pedí una solución completa para un Corsa 1.6 8 válvulas.</span>
+        <span class="case-action">Usar este ejemplo →</span>
+      </button>
+      <button class="suggestion" data-prompt="No tengo el código del motor: solo sé que el vehículo es una Renault Kangoo diésel 1.9. ¿Qué datos debería revisar para que puedas ayudarme a identificar el repuesto correcto?">
+        <span class="case-kicker">Caso 4 · Datos incompletos</span>
+        <strong class="case-title">No sé qué motor tiene el vehículo</strong>
+        <span class="case-detail">Probá cómo el agente guía la conversación antes de recomendar.</span>
+        <span class="case-action">Usar este ejemplo →</span>
+      </button>
+      <button class="suggestion" data-prompt="Estoy buscando un retén de árbol de levas y la pieza vieja mide 30 x 47 x 7 mm. No conozco la aplicación exacta. ¿Podés buscar por medida y decirme qué opción coincide?">
+        <span class="case-kicker">Caso 5 · Búsqueda por medida</span>
+        <strong class="case-title">Identificar un retén por dimensiones</strong>
+        <span class="case-detail">Encontrá una pieza aun cuando no conocés el vehículo de origen.</span>
+        <span class="case-action">Usar este ejemplo →</span>
+      </button>
+    </div>
+  </section>
   <footer>
     <textarea id="input" rows="1" maxlength="1000" placeholder="Escribí tu consulta (máx. 1.000 caracteres)..." autofocus></textarea>
     <button class="send" id="send" title="Enviar">➤</button>
@@ -957,7 +1006,10 @@ CHAT_HTML = r"""<!doctype html>
     });
 
     document.querySelectorAll('.suggestion').forEach(el => el.addEventListener('click', () => {
-      input.value = el.textContent; input.focus();
+      input.value = el.dataset.prompt || '';
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+      input.focus();
     }));
 
     newChat.addEventListener('click', async () => {

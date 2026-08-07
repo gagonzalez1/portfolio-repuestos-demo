@@ -58,6 +58,18 @@ class PortfolioRoutesTests(unittest.TestCase):
         second_alias = self.client.get("/demo/api/me").json()["alias"]
         self.assertNotEqual(first_alias, second_alias)
 
+    def test_chat_presents_rich_editable_example_cases(self):
+        self.client.post("/demo/api/session")
+        response = self.client.get("/demo/chat")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("¿Querés ver cómo razona MotorIA?", response.text)
+        self.assertIn("Podés editar el mensaje antes de enviarlo", response.text)
+        self.assertEqual(response.text.count('class="suggestion" data-prompt='), 5)
+        self.assertIn("Caso 2 · Motor y medida", response.text)
+        self.assertIn("Renault Kangoo diésel 1.9 con motor F8Q", response.text)
+        self.assertIn("30 x 47 x 7 mm", response.text)
+
     def test_admin_dashboard_redirects_without_private_session(self):
         response = self.client.get("/admin/dashboard", follow_redirects=False)
         self.assertEqual(response.status_code, 302)
