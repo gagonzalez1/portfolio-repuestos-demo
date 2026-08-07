@@ -1,0 +1,51 @@
+# SEGURIDAD - NUNCA SUBIR
+.env
+.env.local
+.env.production
+.env.*.local
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Railway
+.railway/
+
+# Claude Code local settings (puede contener credenciales)
+.claude/settings.local.json
+
+# Scripts locales de análisis/debugging
+scripts/
+!scripts/
+scripts/*
+!scripts/build_demo_catalog.py
+!scripts/seed_demo_catalog.py
+
+# Exports del catálogo (regenerables con scripts/export_catalog.py)
+exports/
+
+# Entrada local del constructor: nunca se publica.
+tests/catalog_dump.json
+PLAN_DEMO_PORTFOLIO.md

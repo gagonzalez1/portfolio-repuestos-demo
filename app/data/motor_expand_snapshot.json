@@ -1,0 +1,1240 @@
+{
+  "ford||2.4": {
+    "diesel": [
+      "2.4 16v TDCI - Duratorq"
+    ]
+  },
+  "peugeot||1.6": {
+    "diesel": [
+      "1.6 8v",
+      "1.6 8v XU5",
+      "1.6 8v TU5JP",
+      "1.6 8v HDI DV6",
+      "1.6 16v HDI DV6",
+      "1.6 16v THP EP6DT"
+    ],
+    "nafta": [
+      "1.6 8v",
+      "1.6 8v XU5",
+      "1.6 8v TU5JP",
+      "1.6 16v TU5JP4",
+      "1.6 16v THP EP6DT"
+    ]
+  },
+  "citroen||1.6": {
+    "diesel": [
+      "1.6 8v TU5JP",
+      "1.6 16V TD DV6",
+      "1.6 8v HDI DV6",
+      "1.6 16v HDI DV6",
+      "1.6 16v THP EP6DT"
+    ],
+    "nafta": [
+      "1.6 8v TU5JP",
+      "1.6 16v TU5JP4",
+      "1.6 16v THP EP6DT"
+    ]
+  },
+  "renault||1.6": {
+    "nafta": [
+      "1.6 8v",
+      "1.6 8v K7M",
+      "1.6 16v H4M",
+      "1.6 16v K4M",
+      "1.6 8v C3L - INYECCION",
+      "1.6 8v C1L/C2L - CARBURADOR"
+    ],
+    "diesel": [
+      "1.6 8v K7M",
+      "1.6 16v K4M"
+    ]
+  },
+  "citroen||1.4": {
+    "nafta": [
+      "1.4 8v TU3JP"
+    ],
+    "diesel": [
+      "1.4 8v TUD3",
+      "1.4 8v TU3JP",
+      "1.4 8v HDI DV4"
+    ]
+  },
+  "peugeot||1.4": {
+    "nafta": [
+      "1.4 8v TU3JP"
+    ],
+    "diesel": [
+      "1.4 8v TUD3",
+      "1.4 8v TU3JP",
+      "1.4 8v HDI DV4"
+    ]
+  },
+  "fiat||1.4": {
+    "nafta": [
+      "1.4 8v Fire",
+      "1.4 8v Tipo",
+      "1.4 16v Fire",
+      "1.4 8v TU3JP",
+      "1.4 16V T-Jet",
+      "1.4 8v Fire Evo"
+    ],
+    "diesel": [
+      "1.4 8v Tipo"
+    ]
+  },
+  "renault||1.5": {
+    "diesel": [
+      "1.5 8v DCI K9K"
+    ]
+  },
+  "chevrolet||1.7": {
+    "diesel": [
+      "1.7 8v 4EE1",
+      "1.7 8v 4EE1T",
+      "1.7 16v Y17DTL",
+      "1.7 8v TDI X17DTL"
+    ],
+    "nafta": [
+      "1.7 16v Y17DTL"
+    ]
+  },
+  "daewo||800": {
+    "nafta": [
+      "800 6v F8CV"
+    ]
+  },
+  "renault||2.1": {
+    "diesel": [
+      "2.1 8v J8S"
+    ],
+    "nafta": [
+      "2.1 8v J8S"
+    ]
+  },
+  "chevrolet||1.6": {
+    "nafta": [
+      "1.6 8v",
+      "1.6 16v"
+    ],
+    "_unknown": [
+      "1.6 8v"
+    ]
+  },
+  "renault||1.4": {
+    "nafta": [
+      "1.4 8v",
+      "1.4 8v Junior",
+      "1.4 8v Energy E7J"
+    ],
+    "diesel": [
+      "1.4 8v Energy E7J"
+    ]
+  },
+  "renault||1.9": {
+    "diesel": [
+      "1.9 8v F8Q",
+      "1.9 8v F9Q"
+    ]
+  },
+  "chevrolet||2.2": {
+    "nafta": [
+      "2.2 8v",
+      "2.2 16v"
+    ],
+    "diesel": [
+      "2.2 16v"
+    ]
+  },
+  "chevrolet||2.4": {
+    "nafta": [
+      "2.4 8v",
+      "2.4 16v"
+    ],
+    "diesel": [
+      "2.4 16v"
+    ]
+  },
+  "volkswagen||1.9": {
+    "diesel": [
+      "1.9 8v D",
+      "1.9 8v TD",
+      "1.9 8v SDI",
+      "1.9 8v TDI",
+      "1.9 8v TDI INY. BOMBA"
+    ],
+    "nafta": [
+      "1.9 8v D",
+      "1.9 8v TD"
+    ],
+    "_unknown": [
+      "1.9 8v D",
+      "1.9 8v TD"
+    ]
+  },
+  "suzuki||1.4": {
+    "nafta": [
+      "1.4 8v"
+    ]
+  },
+  "suzuki||1.0": {
+    "nafta": [
+      "1.0 8v",
+      "1.0 8v F10A"
+    ]
+  },
+  "chevrolet||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 16v"
+    ],
+    "diesel": [
+      "1.8 16v"
+    ]
+  },
+  "chevrolet||1.0": {
+    "nafta": [
+      "1.0 8v"
+    ]
+  },
+  "chevrolet||1.4": {
+    "nafta": [
+      "1.4 8v",
+      "1.4 16v"
+    ]
+  },
+  "ford||2.5": {
+    "diesel": [
+      "2.5 8v D",
+      "2.5 8v TDI"
+    ]
+  },
+  "audi||1.9": {
+    "diesel": [
+      "1.9 8v TDI"
+    ]
+  },
+  "fiat||1.3": {
+    "nafta": [
+      "1.3 8v",
+      "1.3 8v D",
+      "1.3 8v MPI",
+      "1.3 8v Fire",
+      "1.3 16v Fire",
+      "1.3 8v Firefly"
+    ],
+    "diesel": [
+      "1.3 8v",
+      "1.3 8v D",
+      "1.3 8v MPI",
+      "1.3 8v Fire"
+    ]
+  },
+  "fiat||2.8": {
+    "diesel": [
+      "2.8 8v IVECO"
+    ],
+    "nafta": [
+      "2.8 8v IVECO"
+    ]
+  },
+  "citroen||2.8": {
+    "diesel": [
+      "2.8 8v IVECO"
+    ],
+    "nafta": [
+      "2.8 8v IVECO"
+    ]
+  },
+  "peugeot||2.8": {
+    "diesel": [
+      "2.8 8v IVECO"
+    ],
+    "nafta": [
+      "2.8 8v IVECO"
+    ]
+  },
+  "iveco||2.8": {
+    "diesel": [
+      "2.8 8v IVECO"
+    ],
+    "nafta": [
+      "2.8 8v IVECO"
+    ]
+  },
+  "iveco||2.5": {
+    "diesel": [
+      "2.5 8v IVECO"
+    ],
+    "nafta": [
+      "2.5 8v IVECO"
+    ]
+  },
+  "renault||2.5": {
+    "diesel": [
+      "2.5 8v IVECO",
+      "2.5 16v DCI G9U"
+    ],
+    "nafta": [
+      "2.5 8v IVECO"
+    ]
+  },
+  "fiat||2.5": {
+    "diesel": [
+      "2.5 8v IVECO"
+    ],
+    "nafta": [
+      "2.5 8v IVECO"
+    ]
+  },
+  "ford||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 8v D",
+      "1.8 8v TD",
+      "1.8 16v Zetec"
+    ],
+    "diesel": [
+      "1.8 8v D",
+      "1.8 8v TD",
+      "1.8 8v TDCI - Duratorq"
+    ]
+  },
+  "ford||2.0": {
+    "nafta": [
+      "2.0 8v",
+      "2.0 16v Zetec",
+      "2.0 16v Duratec"
+    ]
+  },
+  "volkswagen||1.6": {
+    "nafta": [
+      "1.6 8v",
+      "1.6 8v D",
+      "1.6 8v CHT",
+      "1.6 16v MSI"
+    ],
+    "diesel": [
+      "1.6 8v",
+      "1.6 8v D"
+    ],
+    "_unknown": [
+      "1.6 8v D"
+    ]
+  },
+  "volkswagen||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 20v TN"
+    ],
+    "diesel": [
+      "1.8 8v",
+      "1.8 20v TN"
+    ]
+  },
+  "volkswagen||2.0": {
+    "nafta": [
+      "2.0 8v"
+    ],
+    "diesel": [
+      "2.0 8v",
+      "2.0 16v TDI"
+    ]
+  },
+  "kia||2.2": {
+    "diesel": [
+      "2.2 8v D HW",
+      "2.2 8v D R2"
+    ]
+  },
+  "mazda||2.2": {
+    "diesel": [
+      "2.2 8v D HW",
+      "2.2 8v D R2"
+    ]
+  },
+  "toyota||3.0": {
+    "diesel": [
+      "3.0 8v 1KZ-T",
+      "3.0 8v 1KZ-TE",
+      "3.0 8v D/TD 5L",
+      "3.0 16v 1KD-FTV"
+    ]
+  },
+  "ford||1.5": {
+    "nafta": [
+      "1.5 16v Sigma",
+      "1.5 12v Dragon"
+    ]
+  },
+  "volkswagen||1.4": {
+    "nafta": [
+      "1.4 8v",
+      "1.4 16v TSI"
+    ]
+  },
+  "citroen||2.0": {
+    "diesel": [
+      "2.0 8v XU10",
+      "2.0 16v EW10J4",
+      "2.0 8v HDI DW10"
+    ],
+    "nafta": [
+      "2.0 8v XU10",
+      "2.0 16v EW10J4",
+      "2.0 16v XU10J4"
+    ]
+  },
+  "peugeot||2.0": {
+    "diesel": [
+      "2.0 8v",
+      "2.0 8v XU10",
+      "2.0 16v EW10J4",
+      "2.0 8v XD 4.88",
+      "2.0 8v HDI DW10"
+    ],
+    "nafta": [
+      "2.0 8v",
+      "2.0 8v XU10",
+      "2.0 16v EW10J4",
+      "2.0 16v XU10J4",
+      "2.0 8v XD 4.88"
+    ]
+  },
+  "renault||2.0": {
+    "nafta": [
+      "2.0 8v",
+      "2.0 8v F3R",
+      "2.0 16v F4R",
+      "2.0 16v N7Q"
+    ],
+    "diesel": [
+      "2.0 8v",
+      "2.0 8v F3R"
+    ]
+  },
+  "chevrolet||2.0": {
+    "nafta": [
+      "2.0 8v",
+      "2.0 16v"
+    ],
+    "diesel": [
+      "2.0 16v",
+      "2.0 16v TDI"
+    ]
+  },
+  "citroen||1.9": {
+    "diesel": [
+      "1.9 8v DW8",
+      "1.9 8v XUD9",
+      "1.9 8v XUD9T"
+    ],
+    "nafta": [
+      "1.9 8v XU9"
+    ]
+  },
+  "peugeot||1.9": {
+    "diesel": [
+      "1.9 8v DW8",
+      "1.9 8v XU9",
+      "1.9 8v XUD9",
+      "1.9 8v XUD9T"
+    ],
+    "nafta": [
+      "1.9 8v XU9"
+    ]
+  },
+  "renault||1.2": {
+    "nafta": [
+      "1.2 8v D7F",
+      "1.2 16v D4F"
+    ]
+  },
+  "fiat||1.9": {
+    "diesel": [
+      "1.9 8v D",
+      "1.9 8v XUD9",
+      "1.9 8v XUD9T"
+    ],
+    "nafta": [
+      "1.9 16v",
+      "1.9 8v D"
+    ],
+    "_unknown": [
+      "1.9 8v D"
+    ]
+  },
+  "peugeot||1.5": {
+    "nafta": [
+      "1.5 8v TU4"
+    ]
+  },
+  "citroen||1.5": {
+    "nafta": [
+      "1.5 8v TU4"
+    ]
+  },
+  "fiat||1.7": {
+    "diesel": [
+      "1.7 8v D",
+      "1.7 8v TD"
+    ],
+    "_unknown": [
+      "1.7 8v D",
+      "1.7 8v TD"
+    ],
+    "nafta": [
+      "1.7 8v D",
+      "1.7 8v TD"
+    ]
+  },
+  "ford||1.4": {
+    "diesel": [
+      "1.4 8v TDCI DV4"
+    ],
+    "nafta": [
+      "1.4 16v Zetec"
+    ]
+  },
+  "fiat||1.0": {
+    "nafta": [
+      "1.0 8v Fire",
+      "1.0 16v Fire",
+      "1.0 16v Firefly",
+      "1.0 8v Fire Evo"
+    ]
+  },
+  "maxion||2.5": {
+    "diesel": [
+      "2.5 8v TDI"
+    ]
+  },
+  "chevrolet||2.5": {
+    "diesel": [
+      "2.5 8v TDI"
+    ]
+  },
+  "rover||2.5": {
+    "diesel": [
+      "2.5 8v TDI"
+    ]
+  },
+  "mercedez benz||2.5": {
+    "diesel": [
+      "2.5 8v TDI"
+    ]
+  },
+  "ford||1.0": {
+    "nafta": [
+      "1.0 8v Zetec Rocam"
+    ]
+  },
+  "ford||1.6": {
+    "nafta": [
+      "1.6 8v",
+      "1.6 8v CHT",
+      "1.6 16v Sigma",
+      "1.6 16v Zetec",
+      "1.6 16v Zetec SE",
+      "1.6 8v Zetec Rocam"
+    ],
+    "diesel": [
+      "1.6 8v"
+    ]
+  },
+  "ford||1.3": {
+    "nafta": [
+      "1.3 8v Endura"
+    ],
+    "diesel": [
+      "1.3 8v Endura"
+    ]
+  },
+  "seat||1.9": {
+    "diesel": [
+      "1.9 8v D",
+      "1.9 8v TD",
+      "1.9 8v SDI",
+      "1.9 8v TDI"
+    ],
+    "nafta": [
+      "1.9 8v D",
+      "1.9 8v TD"
+    ],
+    "_unknown": [
+      "1.9 8v D",
+      "1.9 8v TD"
+    ]
+  },
+  "nissan||1.6": {
+    "nafta": [
+      "1.6 16v HR16DE"
+    ]
+  },
+  "hyundai||2.5": {
+    "diesel": [
+      "2.5 8v D D4B",
+      "2.5 8v TD D4B"
+    ]
+  },
+  "mitsubishi||2.5": {
+    "diesel": [
+      "2.5 8v D 4D56",
+      "2.5 8v TD 4D56T"
+    ]
+  },
+  "suzuki||2.0": {
+    "diesel": [
+      "2.0 8v TD RF"
+    ]
+  },
+  "mazda||2.0": {
+    "diesel": [
+      "2.0 8v TD RF"
+    ]
+  },
+  "kia||2.0": {
+    "diesel": [
+      "2.0 8v TD RF"
+    ]
+  },
+  "volkswagen||2.4": {
+    "diesel": [
+      "2.4 10v TD"
+    ]
+  },
+  "rover||1.4": {
+    "nafta": [
+      "1.4 16v 14K16"
+    ]
+  },
+  "rover||1.6": {
+    "nafta": [
+      "1.6 16v 16k16"
+    ]
+  },
+  "iveco||2.3": {
+    "diesel": [
+      "2.3 16v JTD F1AE"
+    ]
+  },
+  "fiat||2.3": {
+    "diesel": [
+      "2.3 16v JTD F1AE"
+    ]
+  },
+  "peugeot||2.3": {
+    "diesel": [
+      "2.3 8v XD2",
+      "2.3 16v JTD F1AE"
+    ],
+    "nafta": [
+      "2.3 8v XD2"
+    ]
+  },
+  "citroen||2.3": {
+    "diesel": [
+      "2.3 16v JTD F1AE"
+    ]
+  },
+  "maxion||3.0": {
+    "diesel": [
+      "3.0 16v TD - Maxion"
+    ]
+  },
+  "ford||3.0": {
+    "diesel": [
+      "3.0 16v TD - Maxion"
+    ],
+    "nafta": [
+      "3.0 12v 187",
+      "3.0 12v 188",
+      "3.0 12v Max Econo"
+    ]
+  },
+  "fiat||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 16v",
+      "1.8 16v E-Torq"
+    ]
+  },
+  "volkswagen||1.0": {
+    "nafta": [
+      "1.0 8v",
+      "1.0 12v"
+    ],
+    "diesel": [
+      "1.0 8v"
+    ]
+  },
+  "audi||1.4": {
+    "nafta": [
+      "1.4 16v FSI",
+      "1.4 16v TSI",
+      "1.4 16v TFSI"
+    ]
+  },
+  "toyota||2.8": {
+    "diesel": [
+      "2.8 8v D/TD 3L"
+    ]
+  },
+  "renault||2.3": {
+    "diesel": [
+      "2.3 16v TD M9T"
+    ]
+  },
+  "fiat||2.0": {
+    "diesel": [
+      "2.0 16v TD Multijet"
+    ],
+    "nafta": [
+      "2.0 16v"
+    ]
+  },
+  "citroen||1.8": {
+    "nafta": [
+      "1.8 8v XU7",
+      "1.8 16v XU7JP4"
+    ],
+    "diesel": [
+      "1.8 8v XU7",
+      "1.8 8v XUD7",
+      "1.8 16v XU7JP4"
+    ]
+  },
+  "peugeot||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 8v XU7",
+      "1.8 16v XU7JP4"
+    ],
+    "diesel": [
+      "1.8 8v",
+      "1.8 8v XU7",
+      "1.8 8v XUD7",
+      "1.8 16v XU7JP4"
+    ]
+  },
+  "ford||2.8": {
+    "diesel": [
+      "2.8 8v TDI"
+    ]
+  },
+  "maxion||2.8": {
+    "diesel": [
+      "2.8 8v TDI"
+    ]
+  },
+  "dodge||1.5": {
+    "nafta": [
+      "1.5 8v"
+    ]
+  },
+  "dodge||1.8": {
+    "nafta": [
+      "1.8 8v"
+    ]
+  },
+  "volkswagen||1.5": {
+    "nafta": [
+      "1.5 8v"
+    ]
+  },
+  "seat||2.0": {
+    "diesel": [
+      "2.0 8v"
+    ],
+    "nafta": [
+      "2.0 8v"
+    ]
+  },
+  "seat||1.0": {
+    "diesel": [
+      "1.0 8v"
+    ],
+    "nafta": [
+      "1.0 8v"
+    ]
+  },
+  "daewo||1.5": {
+    "nafta": [
+      "1.5 8v",
+      "1.5 16v"
+    ]
+  },
+  "volvo||1.8": {
+    "nafta": [
+      "1.8 16v B4184S"
+    ]
+  },
+  "volvo||2.0": {
+    "nafta": [
+      "2.0 16v B4204S/T"
+    ]
+  },
+  "renault||1.1": {
+    "nafta": [
+      "1.1 8v"
+    ]
+  },
+  "renault||1.3": {
+    "nafta": [
+      "1.3 8v",
+      "1.3 8v C3G"
+    ]
+  },
+  "toyota||2.5": {
+    "diesel": [
+      "2.5 16v 2KD-FTV"
+    ]
+  },
+  "renault||1.0": {
+    "diesel": [
+      "1.0 8v D7D"
+    ]
+  },
+  "renault||2.2": {
+    "nafta": [
+      "2.2 8v"
+    ],
+    "diesel": [
+      "2.2 8v"
+    ]
+  },
+  "audi||1.6": {
+    "diesel": [
+      "1.6 8v"
+    ],
+    "nafta": [
+      "1.6 8v"
+    ]
+  },
+  "seat||1.6": {
+    "diesel": [
+      "1.6 8v"
+    ],
+    "nafta": [
+      "1.6 8v"
+    ]
+  },
+  "suzuki||1.6": {
+    "nafta": [
+      "1.6 8v"
+    ]
+  },
+  "renault||1.7": {
+    "diesel": [
+      "1.7 8v F2N"
+    ],
+    "nafta": [
+      "1.7 8v F2N"
+    ]
+  },
+  "nissan||2.7": {
+    "diesel": [
+      "2.7 8v TD27",
+      "2.7 8v TD27T"
+    ]
+  },
+  "suzuki||2.2": {
+    "diesel": [
+      "2.2 8v D HW",
+      "2.2 8v D R2"
+    ]
+  },
+  "isuzu||2.3": {
+    "nafta": [
+      "2.3 8v 4ZD1"
+    ]
+  },
+  "chevrolet||2.3": {
+    "nafta": [
+      "2.3 8v 4ZD1"
+    ]
+  },
+  "toyota||2.4": {
+    "diesel": [
+      "2.4 8v D/TD 2L"
+    ],
+    "nafta": [
+      "2.4 8v 22R"
+    ]
+  },
+  "indenor||2.0": {
+    "diesel": [
+      "2.0 8v XD 4.88"
+    ]
+  },
+  "seat||1.8": {
+    "nafta": [
+      "1.8 8v"
+    ]
+  },
+  "daewo||1.8": {
+    "nafta": [
+      "1.8 8v"
+    ]
+  },
+  "daewo||2.0": {
+    "nafta": [
+      "2.0 8v",
+      "2.0 16v"
+    ]
+  },
+  "fiat||1.1": {
+    "nafta": [
+      "1.1 8v"
+    ],
+    "diesel": [
+      "1.1 8v"
+    ]
+  },
+  "fiat||1.6": {
+    "nafta": [
+      "1.6 8v Tipo",
+      "1.6 8v TU5JP",
+      "1.6 16v E-Torq",
+      "1.6 16v Torque"
+    ],
+    "diesel": [
+      "1.6 8v Tipo",
+      "1.6 16v Torque"
+    ]
+  },
+  "fiat||1.5": {
+    "nafta": [
+      "1.5 8v Tipo"
+    ],
+    "diesel": [
+      "1.5 8v Tipo"
+    ]
+  },
+  "renault||1.8": {
+    "nafta": [
+      "1.8 8v",
+      "1.8 8v F3P",
+      "1.8 16v F4P"
+    ]
+  },
+  "indenor||2.3": {
+    "diesel": [
+      "2.3 8v XD2"
+    ],
+    "nafta": [
+      "2.3 8v XD2"
+    ]
+  },
+  "indenor||2.5": {
+    "diesel": [
+      "2.5 8v XD3"
+    ]
+  },
+  "peugeot||2.5": {
+    "diesel": [
+      "2.5 8v XD3"
+    ],
+    "nafta": [
+      "2.5 8v XD3"
+    ]
+  },
+  "ford||3.6": {
+    "nafta": [
+      "3.6 12 221",
+      "3.6 12v 221",
+      "3.6 12v 221 SP"
+    ]
+  },
+  "land rover||2.5": {
+    "diesel": [
+      "2.5 8v TDI"
+    ]
+  },
+  "peugeot||2.2": {
+    "diesel": [
+      "2.2 16V HDI Puma"
+    ]
+  },
+  "ford||2.2": {
+    "diesel": [
+      "2.2 16v TDCi Puma"
+    ]
+  },
+  "fiat||2.2": {
+    "diesel": [
+      "2.2 16v TDCi Puma"
+    ]
+  },
+  "citroen||2.2": {
+    "diesel": [
+      "2.2 16V HDI Puma"
+    ]
+  },
+  "ford||2.3": {
+    "nafta": [
+      "2.3 8v"
+    ]
+  },
+  "alfa romeo||1.4": {
+    "nafta": [
+      "1.4 16v Fire"
+    ]
+  },
+  "alfa romeo||2.0": {
+    "diesel": [
+      "2.0 8v TD"
+    ],
+    "_unknown": [
+      "2.0 8v TD"
+    ],
+    "nafta": [
+      "2.0 16v Twin Spark"
+    ]
+  },
+  "fiat||750": {
+    "nafta": [
+      "750"
+    ]
+  },
+  "seat||1.4": {
+    "nafta": [
+      "1.4 8v"
+    ]
+  },
+  "daewo||1.6": {
+    "nafta": [
+      "1.6 16v"
+    ]
+  },
+  "chevrolet||3.2": {
+    "nafta": [
+      "3.2 12v 194"
+    ]
+  },
+  "chevrolet||3.8": {
+    "nafta": [
+      "3.8 12v 230"
+    ]
+  },
+  "chevrolet||4.0": {
+    "nafta": [
+      "4.0 12v 250"
+    ]
+  },
+  "toyota||1.2": {
+    "nafta": [
+      "1.2 16v 3NR-FE"
+    ]
+  },
+  "toyota||1.5": {
+    "nafta": [
+      "1.5 16v 2NR-FE"
+    ]
+  },
+  "audi||1.8": {
+    "nafta": [
+      "1.8 20v TN"
+    ]
+  },
+  "isuzu||3.1": {
+    "diesel": [
+      "3.1 8v 4JG2",
+      "3.1 8v 4JG2T"
+    ]
+  },
+  "isuzu||2.5": {
+    "diesel": [
+      "2.5 8v 4JA1"
+    ]
+  },
+  "isuzu||2.8": {
+    "diesel": [
+      "2.8 8v 4JB1"
+    ]
+  },
+  "fiat||850": {
+    "nafta": [
+      "850"
+    ]
+  },
+  "suzuki||1.9": {
+    "diesel": [
+      "1.9 8v XUD9"
+    ]
+  },
+  "ford||4.0": {
+    "nafta": [
+      "4.0 12v V6 SOHC"
+    ]
+  },
+  "mitsubishi||2.8": {
+    "diesel": [
+      "2.8 8v 4M40"
+    ]
+  },
+  "daewo||1.4": {
+    "nafta": [
+      "1.4 16v"
+    ]
+  },
+  "ford||5.0": {
+    "diesel": [
+      "5.0 12v 6-305 PF"
+    ]
+  },
+  "perkins||5.0": {
+    "diesel": [
+      "5.0 12v 6-305 PF"
+    ]
+  },
+  "ford||3.3": {
+    "diesel": [
+      "3.3 8v 4-203"
+    ]
+  },
+  "perkins||3.3": {
+    "diesel": [
+      "3.3 8v 4-203"
+    ]
+  },
+  "power stroke||2.8": {
+    "diesel": [
+      "2.8 8v TDI"
+    ]
+  },
+  "alfa romeo||1.8": {
+    "nafta": [
+      "1.8 16v Twin Spark"
+    ]
+  },
+  "kia||2.7": {
+    "diesel": [
+      "2.7 8v D J2"
+    ]
+  },
+  "kia||3.0": {
+    "diesel": [
+      "3.0 8v D JT"
+    ]
+  },
+  "suzuki||1.3": {
+    "nafta": [
+      "1.3 16V G13B"
+    ]
+  },
+  "suzuki||800": {
+    "nafta": [
+      "800cc 8v F8A"
+    ]
+  },
+  "dodge||2.5": {
+    "diesel": [
+      "2.5 8v TD VM"
+    ]
+  },
+  "dodge||3.1": {
+    "diesel": [
+      "3.1 10V TD VM"
+    ]
+  },
+  "chrysler||2.5": {
+    "diesel": [
+      "2.5 8v TD VM"
+    ]
+  },
+  "chrysler||3.1": {
+    "diesel": [
+      "3.1 10V TD VM"
+    ]
+  },
+  "jeep||2.5": {
+    "diesel": [
+      "2.5 8v TD VM"
+    ]
+  },
+  "jeep||3.1": {
+    "diesel": [
+      "3.1 10V TD VM"
+    ]
+  },
+  "jeep||1.8": {
+    "nafta": [
+      "1.8 16v E-Torq"
+    ]
+  },
+  "nissan||1.8": {
+    "nafta": [
+      "1.8 16v MR18"
+    ]
+  },
+  "volkswagen||2.8": {
+    "nafta": [
+      "2.8 30v V6"
+    ]
+  },
+  "audi||2.8": {
+    "nafta": [
+      "2.8 30v V6"
+    ]
+  },
+  "mitsubishi||2.0": {
+    "nafta": [
+      "2.0 8v 4G52/G52B"
+    ]
+  },
+  "honda||2.0": {
+    "diesel": [
+      "2.0 16v F20"
+    ]
+  },
+  "jeep||2.1": {
+    "diesel": [
+      "2.1 8v J8S"
+    ]
+  },
+  "jeep||2.0": {
+    "diesel": [
+      "2.0 16v TD Multijet"
+    ]
+  },
+  "selladores||315": {
+    "_unknown": [
+      "CARTUCHO GRIS 315ML."
+    ]
+  },
+  "mercedez benz||366": {
+    "diesel": [
+      "OM 366"
+    ]
+  },
+  "mitsubishi||1.8": {
+    "nafta": [
+      "1.8 16v 4G93"
+    ]
+  },
+  "mazda||1.3": {
+    "nafta": [
+      "1.3 16v B3"
+    ]
+  },
+  "toyota||1.6": {
+    "nafta": [
+      "1.6 16v 4AFE"
+    ]
+  },
+  "selladores||200": {
+    "_unknown": [
+      "ESCAPLUS POTE 200GR."
+    ]
+  },
+  "kia||2.9": {
+    "diesel": [
+      "2.9 16v CRDI J3"
+    ]
+  },
+  "mercedez benz||2.4": {
+    "diesel": [
+      "2.4 8v OM616 - MB180"
+    ]
+  }
+}

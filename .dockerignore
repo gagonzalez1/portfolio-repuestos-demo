@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+__pycache__
+*.py[cod]
+.pytest_cache
+.venv
+venv
+tests/catalog_dump.json
+tests/manual_validation_*
+notas
+*.md
+!README.md

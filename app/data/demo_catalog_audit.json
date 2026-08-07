@@ -1,0 +1,132 @@
+{
+  "audit_version": 1,
+  "builder_version": "1",
+  "catalog_version": "demo-v1-de7705b2eeeb",
+  "source": {
+    "file": "catalog_dump.json",
+    "sha256": "de7705b2eeeb822f11938d574ee4b24f2a0183a7ab624c7682c2cac4ed7f9bb0",
+    "row_count": 3297,
+    "excluded_unsafe_or_malformed_count": 3
+  },
+  "output": {
+    "sha256": "df69febdbbc3d223d3adbfba62c6ebf5ec1a1f7f132033838817d862e29fa2e6",
+    "product_count": 300,
+    "allowed_product_keys": [
+      "catalog_version",
+      "category",
+      "compatibility",
+      "demo_price",
+      "displacement",
+      "engine_codes",
+      "id",
+      "measurements",
+      "name",
+      "normalized_name",
+      "search_terms",
+      "stock_status",
+      "vehicle_brands",
+      "vehicle_models"
+    ],
+    "removed_source_keys": [
+      "id",
+      "permalink",
+      "price",
+      "regular_price",
+      "sale_price",
+      "sku",
+      "slug",
+      "stock_status"
+    ],
+    "allowed_source_attributes": [
+      "Año",
+      "Combustible",
+      "Diametro Pistón",
+      "Marca Vehiculo",
+      "Medida",
+      "Modelo",
+      "Variante",
+      "motor"
+    ],
+    "discarded_source_attributes": [
+      "Marca"
+    ]
+  },
+  "coverage": {
+    "families": {
+      "juntas": 55,
+      "aros_y_pistones": 45,
+      "cojinetes_y_metales": 40,
+      "retenes_y_sellos": 35,
+      "bombas": 35,
+      "valvulas_guias_y_botadores": 35,
+      "bulones_y_fijaciones": 20,
+      "otros": 35
+    },
+    "source_categories": {
+      "Juego de juntas completo": 17,
+      "Junta tapa de valvulas": 5,
+      "Junta de descarbonización": 15,
+      "Junta tapa de cilindros": 11,
+      "Selladores": 3,
+      "Junta carter": 5,
+      "Aros Semihidraulicos": 4,
+      "Conjunto de motor": 4,
+      "Subconjunto": 16,
+      "Aros rectificación": 13,
+      "Aros Hidraulicos": 8,
+      "Cojinete de bancada": 25,
+      "Cojinete de biela": 15,
+      "Retén de distribución": 6,
+      "Retenes de valvulas": 13,
+      "Reten bancada con porta reten": 4,
+      "Retén bancada": 2,
+      "Reten de arbol de levas": 8,
+      "Reten arbol auxiliar": 1,
+      "Kit de distribucion con bomba": 14,
+      "Bomba de aceite": 12,
+      "Bomba de agua": 7,
+      "Arbol de levas": 13,
+      "Soporte bomba inyectora": 1,
+      "Balancines de válvulas": 6,
+      "Caballete arbol de levas": 1,
+      "Tapa de cilindros": 16,
+      "Valvulas": 12,
+      "Botadores": 1,
+      "Bulones de tapa de cilindros": 20,
+      "Kit de distribucion": 11,
+      "Carter de Aceite": 1,
+      "Biela": 5,
+      "Correas de distribución": 1,
+      "Cables de Encendido": 2,
+      "Liquido Refrigerante": 1,
+      "Cigüeñal": 1
+    },
+    "stock_status": {
+      "out_of_stock": 38,
+      "in_stock": 262
+    },
+    "difficulty": {
+      "basic": 76,
+      "broad_compatibility": 32,
+      "engine_code": 52,
+      "measurement": 140
+    },
+    "vehicle_brand_count": 32,
+    "vehicle_model_count": 220,
+    "engine_count": 122,
+    "products_with_measurements": 293
+  },
+  "privacy_checks": {
+    "status": "passed",
+    "forbidden_pattern_matches": {
+      "url_or_domain": 0,
+      "email": 0,
+      "phone": 0,
+      "original_business": 0
+    },
+    "original_identifiers_copied": false,
+    "original_prices_copied": false,
+    "original_stock_copied": false,
+    "network_access_required": false
+  }
+}
