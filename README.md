@@ -1,16 +1,19 @@
 # MotorIA — demo de búsqueda de repuestos
 
-Demostración independiente de un agente especializado que interpreta consultas
-cotidianas y busca por repuesto, vehículo, modelo, motor y medida. El catálogo,
-los precios y la disponibilidad son ficticios. No es una tienda activa, no
-procesa compras y no representa una relación comercial con una empresa concreta.
+Demostración independiente de descubrimiento asistido: el visitante explora un
+catálogo de repuestos, elige una misión de compatibilidad y recibe pistas
+progresivas de MotorIA sin conocer de antemano el artículo correcto. La misión
+se completa seleccionando y validando una pieza. El catálogo, los precios y la
+disponibilidad son ficticios; no es una tienda activa ni procesa compras.
 
 ## Arquitectura
 
-FastAPI sirve la experiencia web pública y el agente. `DemoCatalogClient`
-consulta 300 productos anonimizados en un PostgreSQL exclusivo, reconstruible
-desde `app/data/demo_catalog.json`. El runtime de portfolio no crea clientes de
-comercio electrónico y el canal Meta permanece deshabilitado.
+FastAPI sirve la experiencia web pública, las misiones y la validación del lado
+del servidor. `DemoCatalogClient` consulta 300 productos anonimizados en un
+PostgreSQL exclusivo, reconstruible desde `app/data/demo_catalog.json`. Los IDs
+objetivo no se exponen al navegador antes de resolver la misión. El runtime de
+portfolio no crea clientes de comercio electrónico y el canal Meta permanece
+deshabilitado.
 
 ## Desarrollo local
 
