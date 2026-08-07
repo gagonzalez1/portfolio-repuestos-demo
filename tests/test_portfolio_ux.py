@@ -28,12 +28,48 @@ def fake_settings(**overrides):
     return SimpleNamespace(**values)
 
 
+class FakeCatalog:
+    def __init__(self):
+        self.products = {
+            "DEMO-0006": {
+                "id": "DEMO-0006",
+                "name": "Junta Mondeo con retenes",
+                "price": "96600",
+                "stock_status": "instock",
+                "categories": ["Junta de descarbonizacion"],
+                "attributes": {"Marca Vehiculo": ["Ford"]},
+            },
+            "DEMO-9999": {
+                "id": "DEMO-9999",
+                "name": "Bomba de aceite Fiat",
+                "price": "100",
+                "stock_status": "instock",
+                "categories": ["Bomba de aceite"],
+                "attributes": {"Marca Vehiculo": ["Fiat"]},
+            },
+        }
+
+    async def browse_products(self, **kwargs):
+        return {
+            "items": list(self.products.values()),
+            "total": 2,
+            "page": kwargs["page"],
+            "per_page": kwargs["per_page"],
+            "pages": 1,
+            "facets": {"categories": ["Bomba de aceite"], "brands": ["Fiat", "Ford"]},
+        }
+
+    async def get_product(self, product_id):
+        return self.products.get(product_id)
+
+
 class PortfolioRoutesTests(unittest.TestCase):
     def setUp(self):
         web_demo._visitor_sessions.clear()
         web_demo._daily_usage.update({"day": date.today(), "global": 0, "ips": {}})
         app = FastAPI()
         app.include_router(web_demo.router)
+        app.state.catalog_client = FakeCatalog()
         self.settings_patch = patch("app.web_demo.get_settings", return_value=fake_settings())
         self.settings_patch.start()
         self.client = TestClient(app)
@@ -58,17 +94,51 @@ class PortfolioRoutesTests(unittest.TestCase):
         second_alias = self.client.get("/demo/api/me").json()["alias"]
         self.assertNotEqual(first_alias, second_alias)
 
-    def test_chat_presents_rich_editable_example_cases(self):
+    def test_chat_presents_catalog_challenge_explorer(self):
         self.client.post("/demo/api/session")
         response = self.client.get("/demo/chat")
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("¿Querés ver cómo razona MotorIA?", response.text)
-        self.assertIn("Podés editar el mensaje antes de enviarlo", response.text)
-        self.assertEqual(response.text.count('class="suggestion" data-prompt='), 5)
-        self.assertIn("Caso 2 · Motor y medida", response.text)
-        self.assertIn("aros Chevrolet Corsa 1.8 STD", response.text)
-        self.assertIn("30 x 47 x 7 mm", response.text)
+        self.assertIn("Desafío de catálogo", response.text)
+        self.assertIn("Elegí una misión", response.text)
+        self.assertIn("Investigá los artículos", response.text)
+        self.assertIn("Validar mi elección", response.text)
+        self.assertNotIn("data-prompt=", response.text)
+
+    def test_challenge_guides_without_exposing_target(self):
+        self.client.post("/demo/api/session")
+        listed = self.client.get("/demo/api/challenges")
+        self.assertEqual(listed.status_code, 200)
+        self.assertEqual(len(listed.json()["items"]), 4)
+        self.assertNotIn("target_id", listed.text)
+
+        started = self.client.post(
+            "/demo/api/challenge/start", json={"challenge_id": "mondeo_junta"}
+        )
+        self.assertEqual(started.status_code, 200)
+        hint = self.client.post(
+            "/demo/api/challenge/hint", json={"challenge_id": "mondeo_junta"}
+        )
+        self.assertEqual(hint.json()["number"], 1)
+
+        wrong = self.client.post(
+            "/demo/api/challenge/check",
+            json={"challenge_id": "mondeo_junta", "product_id": "DEMO-9999"},
+        )
+        self.assertFalse(wrong.json()["correct"])
+        self.assertNotIn("DEMO-0006", wrong.text)
+
+        correct = self.client.post(
+            "/demo/api/challenge/check",
+            json={"challenge_id": "mondeo_junta", "product_id": "DEMO-0006"},
+        )
+        self.assertTrue(correct.json()["correct"])
+
+    def test_catalog_is_available_inside_anonymous_session(self):
+        self.client.post("/demo/api/session")
+        response = self.client.get("/demo/api/catalog?query=mondeo&page=1")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["total"], 2)
 
     def test_admin_dashboard_redirects_without_private_session(self):
         response = self.client.get("/admin/dashboard", follow_redirects=False)

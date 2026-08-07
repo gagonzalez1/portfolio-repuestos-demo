@@ -70,6 +70,7 @@ async def lifespan(app: FastAPI):
         # consumirlos sin replicar el wiring. NO se modifica nada del bot.
         app.state.db = _db
         app.state.agent = _agent
+        app.state.catalog_client = _wc
 
         # Crear tabla auxiliar `demo_feedback` (idempotente). El bot la ignora.
         await init_demo_schema(_db)

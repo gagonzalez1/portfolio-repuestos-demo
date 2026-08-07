@@ -125,6 +125,24 @@ def test_iter_categories_and_attribute_terms_contracts():
     assert all(set(term) == {"id", "name", "slug"} for term in brands)
 
 
+def test_browse_products_returns_filters_facets_and_pagination():
+    client = DemoCatalogClient(ReadPool())
+
+    result = asyncio.run(client.browse_products(
+        query="f8q",
+        category="Aros y pistones",
+        brand="Renault",
+        page=1,
+        per_page=24,
+    ))
+
+    assert result["total"] == 1
+    assert [product["id"] for product in result["items"]] == ["DEMO-0002"]
+    assert result["pages"] == 1
+    assert result["facets"]["categories"] == ["Aros y pistones", "Juntas"]
+    assert result["facets"]["brands"] == ["Renault", "Volkswagen"]
+
+
 def test_seed_record_accepts_builder_allowlist_shape():
     record = _seed_record({
         "id": "DEMO-0042",

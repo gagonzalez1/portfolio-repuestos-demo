@@ -362,6 +362,66 @@ class DemoCatalogClient:
         start = max(page - 1, 0) * max(per_page, 0)
         return products[start : start + min(max(per_page, 0), 100)]
 
+    async def browse_products(
+        self,
+        *,
+        query: str = "",
+        category: str = "",
+        brand: str = "",
+        page: int = 1,
+        per_page: int = 24,
+    ) -> dict:
+        """Devuelve una vista paginada y filtrable para el explorador público."""
+        all_products = await self._all_products()
+        categories = sorted({name for product in all_products for name in product["categories"]})
+        brands = sorted(
+            {
+                value
+                for product in all_products
+                for value in product["attributes"].get("Marca Vehiculo", [])
+            }
+        )
+
+        products = all_products
+        if query.strip():
+            scored = [(_search_score(product, query), product) for product in products]
+            products = [
+                product
+                for score, product in sorted(scored, key=lambda item: (-item[0], item[1]["id"]))
+                if score
+            ]
+        if category.strip():
+            wanted_category = normalize_search_text(category)
+            products = [
+                product
+                for product in products
+                if any(normalize_search_text(value) == wanted_category for value in product["categories"])
+            ]
+        if brand.strip():
+            wanted_brand = normalize_search_text(brand)
+            products = [
+                product
+                for product in products
+                if any(
+                    normalize_search_text(value) == wanted_brand
+                    for value in product["attributes"].get("Marca Vehiculo", [])
+                )
+            ]
+
+        safe_page = max(page, 1)
+        safe_per_page = min(max(per_page, 1), 48)
+        total = len(products)
+        start = (safe_page - 1) * safe_per_page
+        items = products[start : start + safe_per_page]
+        return {
+            "items": items,
+            "total": total,
+            "page": safe_page,
+            "per_page": safe_per_page,
+            "pages": max(1, (total + safe_per_page - 1) // safe_per_page),
+            "facets": {"categories": categories, "brands": brands},
+        }
+
     async def iter_all_products(self, per_page: int = 100, status: str = "publish") -> AsyncIterator[dict]:
         del per_page, status
         for product in await self._all_products():

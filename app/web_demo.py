@@ -37,7 +37,7 @@ import secrets
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Request
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
@@ -90,7 +90,69 @@ _daily_usage: dict[str, object] = {
     "global": 0,
     "ips": {},
 }
-_metrics = {"visits": 0, "demo_starts": 0, "conversations_completed": 0, "cta_clicks": 0}
+_metrics = {
+    "visits": 0,
+    "demo_starts": 0,
+    "conversations_completed": 0,
+    "cta_clicks": 0,
+    "challenges_started": 0,
+    "challenges_completed": 0,
+}
+
+DEMO_CHALLENGES = {
+    "mondeo_junta": {
+        "title": "La tapa del Mondeo",
+        "difficulty": "Inicial",
+        "brief": "Entró un Ford Mondeo 1.8 Zetec 16V para reparar la tapa. Necesitás encontrar una junta de descarbonización que ya incluya retenes.",
+        "skills": ["pieza", "vehículo", "motor", "variante"],
+        "target_id": "DEMO-0006",
+        "hints": [
+            "Empezá por la familia de producto: junta de descarbonización.",
+            "Filtrá la aplicación por Ford y buscá Mondeo con motor Zetec 1.8 16V.",
+            "Compará las variantes: el objetivo pide específicamente una opción con retenes.",
+        ],
+        "success": "Encontraste la junta compatible y verificaste la variante con retenes.",
+    },
+    "corsa_aros": {
+        "title": "El armado del Corsa",
+        "difficulty": "Intermedio",
+        "brief": "Estás armando un Chevrolet Corsa 1.8 8V y el conjunto conserva medida estándar. Encontrá el juego de aros correcto.",
+        "skills": ["familia", "cilindrada", "válvulas", "medida"],
+        "target_id": "DEMO-0056",
+        "hints": [
+            "La familia que necesitás explorar es Aros.",
+            "La aplicación debe corresponder a Chevrolet 1.8 de 8 válvulas.",
+            "STD significa medida estándar; descartá las sobremedidas.",
+        ],
+        "success": "Elegiste los aros para el motor 1.8 8V conservando medida STD.",
+    },
+    "corsa_distribucion": {
+        "title": "Distribución sin piezas sueltas",
+        "difficulty": "Intermedio",
+        "brief": "Un Chevrolet Corsa 1.6 8V necesita distribución completa. El objetivo es resolverla con un kit que incluya también la bomba de agua.",
+        "skills": ["kit", "contenido", "vehículo", "motor"],
+        "target_id": "DEMO-0176",
+        "hints": [
+            "No busques solamente una correa: el objetivo pide un kit completo.",
+            "Usá Chevrolet y Corsa para reducir el catálogo.",
+            "Revisá que el nombre confirme 1.6 8V y que incluya bomba.",
+        ],
+        "success": "Seleccionaste el kit de distribución que integra la bomba de agua.",
+    },
+    "volvo_reten": {
+        "title": "La pieza sin etiqueta",
+        "difficulty": "Avanzado",
+        "brief": "Llegó un retén de árbol de levas sin caja. Solo tenés la medida 30 × 47 × 7 mm y la referencia de que pertenece a un Volvo S40 o V40.",
+        "skills": ["medida", "tipo", "marca", "modelos"],
+        "target_id": "DEMO-0175",
+        "hints": [
+            "Buscá por la medida exacta: 30x47x7.",
+            "La pieza trabaja en el árbol de levas; evitá otros tipos de retenes.",
+            "La compatibilidad debe mencionar Volvo S40 o V40.",
+        ],
+        "success": "Identificaste el retén por dimensiones y confirmaste su aplicación Volvo.",
+    },
+}
 
 
 def _new_visitor_session(client_key: str) -> dict:
@@ -111,6 +173,7 @@ def _new_visitor_session(client_key: str) -> dict:
         "client_key": client_key,
         "message_count": 0,
         "counted_complete": False,
+        "challenge": None,
     }
 
 
@@ -344,6 +407,42 @@ class FeedbackPayload(BaseModel):
     comment: str = ""
 
 
+class ChallengePayload(BaseModel):
+    challenge_id: str
+
+
+class ChallengeCheckPayload(BaseModel):
+    challenge_id: str
+    product_id: str
+
+
+def _public_challenge(challenge_id: str, challenge: dict) -> dict:
+    return {
+        "id": challenge_id,
+        "title": challenge["title"],
+        "difficulty": challenge["difficulty"],
+        "brief": challenge["brief"],
+        "skills": challenge["skills"],
+        "hint_count": len(challenge["hints"]),
+    }
+
+
+def _challenge_mismatch_message(selected: dict, target: dict) -> str:
+    selected_category = set(selected.get("categories", []))
+    target_category = set(target.get("categories", []))
+    if selected_category.isdisjoint(target_category):
+        return "Todavía no. La familia de producto no coincide con la necesidad de la misión."
+
+    selected_attrs = selected.get("attributes", {})
+    target_attrs = target.get("attributes", {})
+    selected_brands = set(selected_attrs.get("Marca Vehiculo", []))
+    target_brands = set(target_attrs.get("Marca Vehiculo", []))
+    if target_brands and selected_brands.isdisjoint(target_brands):
+        return "Vas por la familia correcta, pero la aplicación del vehículo no coincide."
+
+    return "Estás cerca. Compará con más cuidado motor, medida y variante antes de volver a validar."
+
+
 # ── Routes: portfolio público + chat anónimo ───────────────────────────
 
 @router.get("/demo", response_class=HTMLResponse)
@@ -406,6 +505,120 @@ async def demo_me(session: dict = Depends(require_visitor)):
         "messages_remaining": max(
             0, get_settings().demo_max_messages_per_session - session["message_count"]
         ),
+    }
+
+
+@router.get("/demo/api/catalog")
+async def demo_catalog(
+    request: Request,
+    query: str = Query("", max_length=120),
+    category: str = Query("", max_length=100),
+    brand: str = Query("", max_length=100),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(24, ge=1, le=48),
+    session: dict = Depends(require_visitor),
+):
+    del session
+    catalog = getattr(request.app.state, "catalog_client", None)
+    if catalog is None:
+        raise HTTPException(status_code=503, detail="catálogo no inicializado todavía")
+    return await catalog.browse_products(
+        query=_sanitize_message(query),
+        category=_sanitize_message(category),
+        brand=_sanitize_message(brand),
+        page=page,
+        per_page=per_page,
+    )
+
+
+@router.get("/demo/api/challenges")
+async def demo_challenges(session: dict = Depends(require_visitor)):
+    return {
+        "items": [
+            _public_challenge(challenge_id, challenge)
+            for challenge_id, challenge in DEMO_CHALLENGES.items()
+        ],
+        "active": session.get("challenge"),
+    }
+
+
+@router.post("/demo/api/challenge/start")
+async def demo_challenge_start(payload: ChallengePayload, session: dict = Depends(require_visitor)):
+    challenge = DEMO_CHALLENGES.get(payload.challenge_id)
+    if challenge is None:
+        raise HTTPException(status_code=404, detail="misión inexistente")
+    session["challenge"] = {
+        "id": payload.challenge_id,
+        "hints_used": 0,
+        "attempts": 0,
+        "completed": False,
+    }
+    _metrics["challenges_started"] += 1
+    return {
+        "challenge": _public_challenge(payload.challenge_id, challenge),
+        "mentor_message": "Misión iniciada. Explorá el catálogo y elegí un artículo. Si te trabás, pedime una pista.",
+    }
+
+
+@router.post("/demo/api/challenge/hint")
+async def demo_challenge_hint(payload: ChallengePayload, session: dict = Depends(require_visitor)):
+    challenge = DEMO_CHALLENGES.get(payload.challenge_id)
+    state = session.get("challenge")
+    if challenge is None:
+        raise HTTPException(status_code=404, detail="misión inexistente")
+    if not state or state.get("id") != payload.challenge_id:
+        raise HTTPException(status_code=409, detail="iniciá esta misión antes de pedir pistas")
+    hint_index = min(int(state["hints_used"]), len(challenge["hints"]) - 1)
+    state["hints_used"] = min(hint_index + 1, len(challenge["hints"]))
+    return {
+        "hint": challenge["hints"][hint_index],
+        "number": hint_index + 1,
+        "remaining": max(0, len(challenge["hints"]) - state["hints_used"]),
+    }
+
+
+@router.post("/demo/api/challenge/check")
+async def demo_challenge_check(
+    payload: ChallengeCheckPayload,
+    request: Request,
+    session: dict = Depends(require_visitor),
+):
+    challenge = DEMO_CHALLENGES.get(payload.challenge_id)
+    state = session.get("challenge")
+    if challenge is None:
+        raise HTTPException(status_code=404, detail="misión inexistente")
+    if not state or state.get("id") != payload.challenge_id:
+        raise HTTPException(status_code=409, detail="iniciá esta misión antes de validar")
+
+    catalog = getattr(request.app.state, "catalog_client", None)
+    if catalog is None:
+        raise HTTPException(status_code=503, detail="catálogo no inicializado todavía")
+    selected = await catalog.get_product(payload.product_id)
+    target = await catalog.get_product(challenge["target_id"])
+    if selected is None or target is None:
+        raise HTTPException(status_code=404, detail="artículo inexistente")
+
+    state["attempts"] += 1
+    if payload.product_id != challenge["target_id"]:
+        return {
+            "correct": False,
+            "message": _challenge_mismatch_message(selected, target),
+            "attempts": state["attempts"],
+        }
+
+    if not state["completed"]:
+        state["completed"] = True
+        _metrics["challenges_completed"] += 1
+    return {
+        "correct": True,
+        "message": challenge["success"],
+        "attempts": state["attempts"],
+        "product": {
+            "id": target["id"],
+            "name": target["name"],
+            "price": target["price"],
+            "stock_status": target["stock_status"],
+        },
     }
 
 
@@ -646,11 +859,11 @@ h1{font-size:clamp(38px,7vw,68px);line-height:1.02;max-width:800px;margin:22px 0
 button,a.cta{border:0;border-radius:12px;padding:14px 20px;font:inherit;font-weight:750;cursor:pointer;text-decoration:none}.start{background:var(--brand);color:white}.cta{color:var(--brand);background:white;border:1px solid #ddd9ff}.notice{background:#fff7dc;border:1px solid #f0d881;padding:14px 16px;border-radius:12px;font-size:14px;color:#66531d;max-width:760px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px}.card{background:white;padding:22px;border-radius:16px;border:1px solid #e8e9ef}.card b{display:block;margin-bottom:8px}.card p{font-size:14px;margin:0}.err{color:#b42318;min-height:20px;margin-top:8px}@media(max-width:720px){.grid{grid-template-columns:1fr}.wrap{padding:36px 0}}
 </style></head><body><main class="wrap">
-<span class="pill">PROYECTO DEMOSTRATIVO</span><h1>Encontrar el repuesto correcto, conversando.</h1>
-<p>MotorIA interpreta consultas cotidianas, motores, modelos y medidas para buscar en un catálogo técnico. La experiencia muestra cómo un agente especializado reduce ambigüedad antes de presentar resultados.</p>
+<span class="pill">DESAFÍO INTERACTIVO</span><h1>Encontrá el repuesto correcto.</h1>
+<p>Explorá un catálogo técnico de 300 artículos, elegí una misión y usá las pistas de MotorIA para llegar a la pieza correcta. Acá el agente te guía: la decisión final es tuya.</p>
 <div class="notice"><strong>Aviso:</strong> el catálogo, los productos, precios y disponibilidad son ficticios. No es una tienda activa ni permite comprar o reservar.</div>
-<div class="actions"><button class="start" id="start">Probar la demo anónima</button><a class="cta" href="/demo/api/cta">Crear una solución con MetaIA ↗</a></div><div class="err" id="err"></div>
-<section class="grid"><div class="card"><b>Problema</b><p>Las consultas de repuestos suelen llegar incompletas, con jerga o compatibilidades difíciles de validar.</p></div><div class="card"><b>Capacidades</b><p>Búsqueda por pieza, vehículo, motor, cilindrada y medida, con preguntas de aclaración.</p></div><div class="card"><b>Arquitectura</b><p>FastAPI, agente LLM, PostgreSQL aislado y catálogo demostrativo anonimizado.</p></div></section>
+<div class="actions"><button class="start" id="start">Entrar al desafío</button><a class="cta" href="/demo/api/cta">Crear una solución con MetaIA ↗</a></div><div class="err" id="err"></div>
+<section class="grid"><div class="card"><b>1. Elegí una misión</b><p>Recibí una necesidad realista de taller sin conocer de antemano el artículo correcto.</p></div><div class="card"><b>2. Investigá el catálogo</b><p>Combiná familia, vehículo, motor y medidas. MotorIA ofrece pistas progresivas.</p></div><div class="card"><b>3. Validá tu elección</b><p>Seleccioná un artículo y comprobá si resolviste correctamente la compatibilidad.</p></div></section>
 </main><script>
 const btn=document.getElementById('start'),err=document.getElementById('err');btn.onclick=async()=>{btn.disabled=true;err.textContent='';try{const r=await fetch('/demo/api/session',{method:'POST'}),d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.detail||'No se pudo iniciar');location.href=d.redirect}catch(e){err.textContent=e.message}finally{btn.disabled=false}};
 </script></body></html>"""
@@ -1044,6 +1257,87 @@ CHAT_HTML = r"""<!doctype html>
 </body>
 </html>
 """
+
+
+EXPLORER_HTML = r"""<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MotorIA — Desafío de catálogo</title>
+  <style>
+    :root{--ink:#172033;--muted:#667085;--paper:#f4f6f8;--panel:#fff;--line:#e4e7ec;--green:#075e54;--green2:#0b7668;--red:#8b1a1a;--violet:#5b45e0;--amber:#b45309}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}button,input,select{font:inherit}
+    header{height:64px;background:var(--green);color:#fff;display:flex;align-items:center;gap:12px;padding:0 20px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0002}
+    .logo{width:40px;height:40px;border-radius:12px;background:var(--red);display:grid;place-items:center;font-weight:900}.brand{flex:1}.brand b{display:block}.brand small{opacity:.8}.demo{background:#b42318;padding:6px 10px;border-radius:7px;font-weight:900;letter-spacing:.08em;font-size:12px}.toplink{color:#fff;text-decoration:none;border:1px solid #ffffff66;border-radius:8px;padding:8px 11px;font-size:12px}
+    .notice{background:#fff5d6;color:#664d03;border-bottom:1px solid #eed78e;text-align:center;padding:7px 16px;font-size:12px}
+    .layout{display:grid;grid-template-columns:290px minmax(0,1fr) 310px;min-height:calc(100vh - 97px)}
+    .missions,.mentor{background:var(--panel);padding:18px;border-right:1px solid var(--line);overflow:auto}.mentor{border-right:0;border-left:1px solid var(--line)}
+    .section-label{font-size:11px;color:var(--violet);font-weight:900;letter-spacing:.08em;text-transform:uppercase}.missions h1,.mentor h2{font-size:21px;margin:6px 0}.intro{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 14px}
+    .mission-list{display:grid;gap:9px}.mission{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left;cursor:pointer;transition:.15s}.mission:hover{border-color:#a99ff2;transform:translateY(-1px)}.mission.active{border:2px solid var(--violet);background:#f7f5ff}.mission-top{display:flex;justify-content:space-between;gap:8px}.mission-title{font-size:14px;font-weight:800}.difficulty{font-size:10px;color:var(--amber);background:#fff4e8;border-radius:999px;padding:3px 6px;height:max-content}.mission p{color:var(--muted);font-size:11px;line-height:1.35;margin:6px 0 0}.skills{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}.skill{font-size:9px;background:#eef4f3;color:var(--green);border-radius:999px;padding:3px 6px}
+    .catalog{padding:20px;min-width:0}.catalog-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:14px}.catalog h2{font-size:26px;margin:2px 0}.catalog-sub{color:var(--muted);font-size:13px}.count{font-size:12px;color:var(--green);font-weight:800;white-space:nowrap}
+    .toolbar{display:grid;grid-template-columns:minmax(180px,1fr) 190px 170px auto;gap:8px;background:#fff;padding:10px;border:1px solid var(--line);border-radius:13px;margin-bottom:14px}.toolbar input,.toolbar select{width:100%;border:1px solid #d0d5dd;border-radius:9px;padding:10px;background:#fff;color:var(--ink)}.toolbar button{border:0;background:#edf2f1;color:var(--green);border-radius:9px;padding:0 13px;cursor:pointer;font-weight:700}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:11px}.product{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;display:flex;flex-direction:column;min-height:220px;transition:.15s}.product:hover{box-shadow:0 7px 20px #10182812;border-color:#b8c7c5}.product.selected{border:2px solid var(--violet);box-shadow:0 0 0 3px #5b45e018}.product-head{display:flex;justify-content:space-between;gap:8px}.category{font-size:9px;color:var(--red);font-weight:900;text-transform:uppercase;letter-spacing:.05em}.sku{font-size:9px;color:#98a2b3}.product h3{font-size:14px;line-height:1.32;margin:7px 0 10px}.specs{display:grid;gap:5px;margin-bottom:12px}.spec{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.spec b{color:#344054}.product-foot{display:flex;align-items:end;justify-content:space-between;gap:8px;margin-top:auto}.price{font-weight:900;color:var(--green)}.stock{font-size:9px;color:#027a48}.stock.out{color:#b42318}.choose{border:0;border-radius:8px;background:#edf2f1;color:var(--green);padding:7px 9px;font-size:10px;font-weight:800;cursor:pointer}.selected .choose{background:var(--violet);color:#fff}
+    .empty{grid-column:1/-1;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;padding:36px;text-align:center;color:var(--muted)}.pager{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:16px}.pager button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;cursor:pointer}.pager button:disabled{opacity:.4}.pager span{font-size:12px;color:var(--muted)}
+    .mentor-card{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}.mentor-card.active{border-color:#a99ff2;background:#faf9ff}.mentor-card h3{font-size:15px;margin:0 0 7px}.brief{font-size:12px;line-height:1.5;color:#475467}.mentor-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.mentor-actions button,.validate{border:0;border-radius:9px;padding:9px;font-weight:800;cursor:pointer;font-size:11px}.hint-btn{background:#fff0d8;color:#92400e}.restart-btn{background:#eef2f6;color:#344054}
+    .mentor-log{display:grid;gap:7px;margin-top:12px}.mentor-msg{font-size:11px;line-height:1.42;background:#edf7f5;color:#174c45;border-radius:10px 10px 10px 2px;padding:9px}.mentor-msg.error{background:#fff1f0;color:#9f1c13}.mentor-msg.success{background:#ecfdf3;color:#027a48;border:1px solid #abefc6}
+    .selection-empty{text-align:center;color:var(--muted);font-size:12px;padding:18px 5px}.selected-product{display:none}.selected-product.show{display:block}.selected-product .label{font-size:10px;color:var(--violet);font-weight:900}.selected-product h3{font-size:14px;line-height:1.35;margin:5px 0}.validate{width:100%;background:var(--violet);color:#fff;margin-top:10px;padding:11px}.validate:disabled,.hint-btn:disabled{opacity:.45;cursor:not-allowed}
+    .loading{opacity:.55;pointer-events:none}
+    @media(max-width:1120px){.layout{grid-template-columns:260px minmax(0,1fr)}.mentor{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:14px}.mentor>h2,.mentor>.section-label,.mentor>.intro{display:none}.mentor-card{margin:0}}
+    @media(max-width:760px){header{padding:0 12px}.brand small,.toplink{display:none}.layout{display:block}.missions{border-right:0;border-bottom:1px solid var(--line);padding:14px}.mission-list{display:flex;overflow-x:auto}.mission{min-width:245px}.catalog{padding:14px}.catalog-head{align-items:flex-start}.toolbar{grid-template-columns:1fr 1fr}.toolbar .search{grid-column:1/-1}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mentor{display:block;padding:14px}.mentor-card{margin-top:10px}}
+    @media(max-width:480px){.product-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.toolbar .search{grid-column:auto}.catalog h2{font-size:22px}.notice{font-size:10px}}
+  </style>
+</head>
+<body>
+  <header><div class="logo">MI</div><div class="brand"><b>MotorIA</b><small>Desafío de catálogo</small></div><span class="demo">DEMO</span><a class="toplink" href="/demo/api/cta">Crear con MetaIA ↗</a></header>
+  <div class="notice"><strong>Catálogo ficticio:</strong> 300 artículos, precios y stock creados exclusivamente para esta demostración.</div>
+  <div class="layout">
+    <aside class="missions">
+      <span class="section-label">Paso 1</span><h1>Elegí una misión</h1>
+      <p class="intro">Cada objetivo simula una consulta real de taller. La respuesta correcta está dentro del catálogo.</p>
+      <div class="mission-list" id="mission-list"></div>
+    </aside>
+    <main class="catalog" id="catalog">
+      <div class="catalog-head"><div><span class="section-label">Paso 2</span><h2>Investigá los artículos</h2><div class="catalog-sub">Buscá, filtrá y compará compatibilidades antes de elegir.</div></div><div class="count" id="count">Cargando catálogo…</div></div>
+      <form class="toolbar" id="filters"><input class="search" id="query" placeholder="Buscar pieza, modelo, motor o medida…"><select id="category"><option value="">Todas las familias</option></select><select id="brand"><option value="">Todas las marcas</option></select><button type="button" id="clear">Limpiar</button></form>
+      <div class="product-grid" id="product-grid"></div>
+      <div class="pager"><button id="prev">← Anterior</button><span id="page-info"></span><button id="next">Siguiente →</button></div>
+    </main>
+    <aside class="mentor">
+      <span class="section-label">Paso 3</span><h2>Resolvé con MotorIA</h2><p class="intro">Te orienta con pistas progresivas, pero no revela la pieza.</p>
+      <section class="mentor-card" id="active-card"><div class="selection-empty" id="mission-empty">Elegí una misión para comenzar.</div><div id="mission-active" hidden><h3 id="active-title"></h3><div class="brief" id="active-brief"></div><div class="mentor-actions"><button class="hint-btn" id="hint">Pedir una pista</button><button class="restart-btn" id="restart">Reiniciar misión</button></div><div class="mentor-log" id="mentor-log"></div></div></section>
+      <section class="mentor-card"><div class="selection-empty" id="selection-empty">Todavía no elegiste ningún artículo.</div><div class="selected-product" id="selected-product"><span class="label">TU ELECCIÓN</span><h3 id="selected-name"></h3><div class="brief" id="selected-meta"></div><button class="validate" id="validate">Validar mi elección</button></div></section>
+    </aside>
+  </div>
+  <script>
+    const state={challenges:[],active:null,selected:null,page:1,pages:1,facetsLoaded:false};
+    const $=id=>document.getElementById(id);
+    const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const money=value=>value?new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(value)):'Sin precio';
+    const first=(attrs,key)=>((attrs||{})[key]||[]).slice(0,2).join(', ')||'—';
+    async function api(url,options={}){const r=await fetch(url,options);if(r.status===401){location.href='/demo';throw new Error('Sesión vencida')}const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.detail||'No se pudo completar');return data}
+    function body(data){return{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}}
+    async function loadChallenges(){const data=await api('/demo/api/challenges');state.challenges=data.items;renderChallenges()}
+    function renderChallenges(){$('mission-list').innerHTML=state.challenges.map(c=>`<button class="mission ${state.active?.id===c.id?'active':''}" data-id="${esc(c.id)}"><div class="mission-top"><span class="mission-title">${esc(c.title)}</span><span class="difficulty">${esc(c.difficulty)}</span></div><p>${esc(c.brief)}</p><div class="skills">${c.skills.map(s=>`<span class="skill">${esc(s)}</span>`).join('')}</div></button>`).join('');document.querySelectorAll('.mission').forEach(el=>el.onclick=()=>startMission(el.dataset.id))}
+    async function startMission(id){const data=await api('/demo/api/challenge/start',body({challenge_id:id}));state.active=data.challenge;state.selected=null;renderChallenges();$('mission-empty').hidden=true;$('mission-active').hidden=false;$('active-card').classList.add('active');$('active-title').textContent=data.challenge.title;$('active-brief').textContent=data.challenge.brief;$('mentor-log').innerHTML=`<div class="mentor-msg">${esc(data.mentor_message)}</div>`;$('hint').disabled=false;clearSelection();window.scrollTo({top:0,behavior:'smooth'})}
+    function filters(){return new URLSearchParams({query:$('query').value.trim(),category:$('category').value,brand:$('brand').value,page:String(state.page),per_page:'24'})}
+    async function loadCatalog(){const grid=$('product-grid');grid.classList.add('loading');try{const data=await api('/demo/api/catalog?'+filters());state.pages=data.pages;if(!state.facetsLoaded){fillSelect('category',data.facets.categories,'Todas las familias');fillSelect('brand',data.facets.brands,'Todas las marcas');state.facetsLoaded=true}renderProducts(data.items);$('count').textContent=`${data.total} artículo${data.total===1?'':'s'} encontrados`;$('page-info').textContent=`Página ${data.page} de ${data.pages}`;$('prev').disabled=data.page<=1;$('next').disabled=data.page>=data.pages}catch(e){grid.innerHTML=`<div class="empty">${esc(e.message)}</div>`}finally{grid.classList.remove('loading')}}
+    function fillSelect(id,values,label){const select=$(id);select.innerHTML=`<option value="">${label}</option>`+values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}
+    function renderProducts(items){$('product-grid').innerHTML=items.length?items.map(p=>{const a=p.attributes||{};const selected=state.selected?.id===p.id;return`<article class="product ${selected?'selected':''}" data-id="${esc(p.id)}"><div class="product-head"><span class="category">${esc((p.categories||[])[0]||'Repuesto')}</span><span class="sku">${esc(p.id)}</span></div><h3>${esc(p.name)}</h3><div class="specs"><div class="spec"><b>Marca:</b> ${esc(first(a,'Marca Vehiculo'))}</div><div class="spec"><b>Modelo:</b> ${esc(first(a,'Modelo'))}</div><div class="spec"><b>Motor:</b> ${esc(first(a,'motor'))}</div><div class="spec"><b>Medida:</b> ${esc(first(a,'Medida'))}</div></div><div class="product-foot"><div><div class="price">${money(p.price)}</div><div class="stock ${p.stock_status==='outofstock'?'out':''}">${p.stock_status==='outofstock'?'Stock ficticio: agotado':'Stock ficticio: disponible'}</div></div><button class="choose" data-id="${esc(p.id)}">${selected?'Elegido ✓':'Elegir'}</button></div></article>`}).join(''):'<div class="empty">No hay artículos con esos filtros. Probá quitando una condición.</div>';document.querySelectorAll('.choose').forEach(btn=>btn.onclick=()=>choose(btn.dataset.id,items.find(p=>p.id===btn.dataset.id)))}
+    function choose(id,product){state.selected=product;$('selection-empty').hidden=true;$('selected-product').classList.add('show');$('selected-name').textContent=product.name;$('selected-meta').textContent=`${product.id} · ${(product.categories||[])[0]||'Repuesto'}`;$('validate').textContent='Validar mi elección';$('validate').disabled=!state.active;loadCatalog()}
+    function clearSelection(){state.selected=null;$('selection-empty').hidden=false;$('selected-product').classList.remove('show');$('validate').textContent='Validar mi elección';loadCatalog()}
+    function addMessage(text,type=''){const div=document.createElement('div');div.className='mentor-msg '+type;div.textContent=text;$('mentor-log').appendChild(div);div.scrollIntoView({behavior:'smooth',block:'nearest'})}
+    $('hint').onclick=async()=>{if(!state.active)return;try{const d=await api('/demo/api/challenge/hint',body({challenge_id:state.active.id}));addMessage(`Pista ${d.number}: ${d.hint}`);$('hint').disabled=d.remaining===0}catch(e){addMessage(e.message,'error')}};
+    $('restart').onclick=()=>state.active&&startMission(state.active.id);
+    $('validate').onclick=async()=>{if(!state.active){addMessage('Primero elegí una misión.','error');return}if(!state.selected)return;try{const d=await api('/demo/api/challenge/check',body({challenge_id:state.active.id,product_id:state.selected.id}));addMessage(d.message,d.correct?'success':'error');if(d.correct){$('validate').textContent='Misión resuelta ✓';$('validate').disabled=true}}catch(e){addMessage(e.message,'error')}};
+    let timer;$('query').oninput=()=>{clearTimeout(timer);timer=setTimeout(()=>{state.page=1;loadCatalog()},280)};$('category').onchange=$('brand').onchange=()=>{state.page=1;loadCatalog()};$('filters').onsubmit=e=>{e.preventDefault();state.page=1;loadCatalog()};$('clear').onclick=()=>{$('query').value='';$('category').value='';$('brand').value='';state.page=1;loadCatalog()};$('prev').onclick=()=>{state.page--;loadCatalog();$('catalog').scrollIntoView()};$('next').onclick=()=>{state.page++;loadCatalog();$('catalog').scrollIntoView()};
+    Promise.all([loadChallenges(),loadCatalog()]).catch(e=>console.error(e));
+  </script>
+</body></html>"""
+
+# La experiencia portfolio usa el explorador de catálogo y conserva el chat
+# anterior únicamente como referencia histórica dentro de este artefacto.
+CHAT_HTML = EXPLORER_HTML
 
 
 ADMIN_LOGIN_HTML = r"""<!doctype html>
