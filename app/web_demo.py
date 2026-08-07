@@ -816,9 +816,9 @@ CHAT_HTML = r"""<!doctype html>
   </main>
   <div class="typing" id="typing" style="display:none;">MotorIA está analizando la consulta...</div>
   <div class="suggestions" aria-label="Consultas sugeridas">
-    <button class="suggestion">Necesito una junta de tapa para un Fox 1.6</button>
-    <button class="suggestion">Busco aros para motor F8Q</button>
-    <button class="suggestion">¿Tenés algo para un Corsa 1.6?</button>
+    <button class="suggestion">Necesito una junta de descarbonización para Mondeo 1.8 Zetec</button>
+    <button class="suggestion">Busco un subconjunto para motor F8Q en 0.50</button>
+    <button class="suggestion">Busco un kit de distribución con bomba para Corsa 1.6</button>
     <button class="suggestion">No sé qué motor tiene, ¿me ayudás?</button>
     <button class="suggestion">Busco un retén 35 x 47 x 7</button>
   </div>
