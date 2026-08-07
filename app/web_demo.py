@@ -839,16 +839,16 @@ CHAT_HTML = r"""<!doctype html>
       <span class="examples-hint">Elegí un desafío. Podés editar el mensaje antes de enviarlo.</span>
     </div>
     <div class="suggestions" aria-label="Casos para probar">
-      <button class="suggestion" data-prompt="Estoy reparando un Ford Mondeo 1.8 Zetec 16V y necesito una junta de descarbonización completa. Si puede venir con retenes, mejor. ¿Qué opción del catálogo me recomendarías y por qué?">
+      <button class="suggestion" data-prompt="Estoy reparando un Ford Mondeo 1.8 Zetec 16V. Para avanzar necesito que busques en el catálogo una junta de descarbonización Mondeo Zetec. Después contame qué incluye la opción encontrada y si trae retenes.">
         <span class="case-kicker">Caso 1 · Compatibilidad</span>
         <strong class="case-title">Una junta completa para un Mondeo</strong>
         <span class="case-detail">Buscá una opción para el Zetec 16V y pedí que incluya retenes.</span>
         <span class="case-action">Usar este ejemplo →</span>
       </button>
-      <button class="suggestion" data-prompt="Tengo una Renault Kangoo diésel 1.9 con motor F8Q y estoy armando el motor en medida 0.50. Busco un subconjunto compatible. ¿Podés encontrarme una opción y mostrarme los datos importantes?">
+      <button class="suggestion" data-prompt="Estoy reparando el motor de un Chevrolet Corsa 1.8 y necesito mantener la medida estándar. Buscá en el catálogo aros Chevrolet Corsa 1.8 STD y contame qué opción encontrás.">
         <span class="case-kicker">Caso 2 · Motor y medida</span>
-        <strong class="case-title">Armar un F8Q en medida 0.50</strong>
-        <span class="case-detail">Combiná vehículo, combustible, código de motor y sobremedida.</span>
+        <strong class="case-title">Elegir aros en medida estándar</strong>
+        <span class="case-detail">Combiná vehículo, cilindrada, tipo de pieza y medida STD.</span>
         <span class="case-action">Usar este ejemplo →</span>
       </button>
       <button class="suggestion" data-prompt="Necesito hacer la distribución de un Chevrolet Corsa 1.6 8 válvulas y prefiero un kit que ya incluya la bomba de agua. ¿Hay alguna alternativa compatible en el catálogo?">
@@ -863,7 +863,7 @@ CHAT_HTML = r"""<!doctype html>
         <span class="case-detail">Probá cómo el agente guía la conversación antes de recomendar.</span>
         <span class="case-action">Usar este ejemplo →</span>
       </button>
-      <button class="suggestion" data-prompt="Estoy buscando un retén de árbol de levas y la pieza vieja mide 30 x 47 x 7 mm. No conozco la aplicación exacta. ¿Podés buscar por medida y decirme qué opción coincide?">
+      <button class="suggestion" data-prompt="Tengo en el taller un retén viejo de 30 x 47 x 7 mm. Buscá exactamente un retén de árbol de levas Volvo 30x47x7 y explicame para qué modelos podría servir.">
         <span class="case-kicker">Caso 5 · Búsqueda por medida</span>
         <strong class="case-title">Identificar un retén por dimensiones</strong>
         <span class="case-detail">Encontrá una pieza aun cuando no conocés el vehículo de origen.</span>

@@ -67,7 +67,7 @@ class PortfolioRoutesTests(unittest.TestCase):
         self.assertIn("Podés editar el mensaje antes de enviarlo", response.text)
         self.assertEqual(response.text.count('class="suggestion" data-prompt='), 5)
         self.assertIn("Caso 2 · Motor y medida", response.text)
-        self.assertIn("Renault Kangoo diésel 1.9 con motor F8Q", response.text)
+        self.assertIn("aros Chevrolet Corsa 1.8 STD", response.text)
         self.assertIn("30 x 47 x 7 mm", response.text)
 
     def test_admin_dashboard_redirects_without_private_session(self):
